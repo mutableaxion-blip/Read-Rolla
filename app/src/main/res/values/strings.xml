@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Read Rolla</string>
+    <string name="widget_desc">The Read Rolla wheel: tap it to float Read Rolla over any app.</string>
+</resources>
