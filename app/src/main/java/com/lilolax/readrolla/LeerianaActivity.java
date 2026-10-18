@@ -8,7 +8,7 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-/** All of Leeriana, full screen, sharing its storage with the floating Read Rolla. */
+/** All of Leeriana, full screen, sharing its storage with the floating Read Records. */
 public class LeerianaActivity extends Activity {
     private static final int FILES = 52;
     private WebView web;

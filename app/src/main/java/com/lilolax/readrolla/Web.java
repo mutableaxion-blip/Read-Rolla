@@ -21,7 +21,7 @@ import java.io.InputStream;
 final class Web {
     static final String HOST = "leeriana.local";
     static final String BASE = "https://" + HOST + "/";
-    /** Opens Read Rolla' chooser once Leeriana has loaded (the cover is opened first, as a tap on it would). */
+    /** Opens Read Records’ chooser once Leeriana has loaded (the cover is opened first, as a tap on it would). */
     static final String WHEELS_JS =
         "(function(){var n=0,t=setInterval(function(){n++;" +
         "if(window.LeerianaRimReader&&window.StarSeekerCover){clearInterval(t);" +
@@ -87,7 +87,7 @@ final class Web {
             }
         });
         w.setWebChromeClient(new WebChromeClient());
-        w.loadUrl(BASE + (wheelsOnly ? "#readrolla" : ""));
+        w.loadUrl(BASE + (wheelsOnly ? "#readrecords" : ""));
         return w;
     }
 }

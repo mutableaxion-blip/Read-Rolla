@@ -1,4 +1,4 @@
-name: Build the Read Rolla app
+name: Build the Read Records app
 on:
   push:
     branches: [main]
@@ -20,14 +20,14 @@ jobs:
       - name: Build the app
         run: gradle assembleDebug --no-daemon --stacktrace
       - name: Name it
-        run: cp app/build/outputs/apk/debug/app-debug.apk ReadRolla.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk ReadRecords.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: ReadRolla-apk
-          path: ReadRolla.apk
+          name: ReadRecords-apk
+          path: ReadRecords.apk
       - name: Put it on the Releases page (an easy download on your phone)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
-          name: Read Rolla build ${{ github.run_number }}
-          files: ReadRolla.apk
+          name: Read Records build ${{ github.run_number }}
+          files: ReadRecords.apk

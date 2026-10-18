@@ -20,9 +20,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".LeerianaActivity" android:exported="false"
+        <activity android:name=".LeerianaActivity" android:exported="true"
+            android:label="Leeriana"
+            android:icon="@mipmap/ic_leeriana"
+            android:roundIcon="@mipmap/ic_leeriana"
+            android:taskAffinity="com.lilolax.leeriana"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <service android:name=".FloatService" android:exported="false" />
 

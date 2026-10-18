@@ -19,7 +19,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/** The front of the app: float Read Rolla, open the whole of Leeriana, or choose which Leeriana file it runs. */
+/** The front of the app: float Read Records, open the whole of Leeriana, or choose which Leeriana file it runs. */
 public class MainActivity extends Activity {
     private static final int PICK = 41;
     private boolean wantFloat;
@@ -38,22 +38,24 @@ public class MainActivity extends Activity {
         sv.addView(col);
 
         TextView h = new TextView(this);
-        h.setText("Read Rolla");
+        h.setText("Read Records");
         h.setTextSize(34);
         h.setTextColor(0xFFE3D3A3);
         h.setTypeface(android.graphics.Typeface.SERIF);
         col.addView(h);
 
         TextView p = new TextView(this);
-        p.setText("Float Read Rolla over any app. Drag the wheel anywhere; tap it to open, drag the window by its title, resize it from the corner, and drag the wheel onto the cross to put it away.\n\nFor a wheel on your home screen: hold an empty spot on the home screen → Widgets → Read Rolla, then drag it wherever you like.");
+        p.setText("Float Read Records over any app. Drag the wheel anywhere; tap it to open, drag the window by its title, resize it from the corner, and drag the wheel onto the cross to put it away.\n\nLeeriana has its own icon too: tap “Put Leeriana on my home screen”, or find Leeriana in your app list and drag it to your home screen. For the wheel on your home screen, tap “Put the Read Records wheel on my home screen”.");
         p.setTextSize(16);
         p.setTextColor(0xFFCFD6CB);
         p.setLineSpacing(0, 1.2f);
         p.setPadding(0, Math.round(10 * d), 0, Math.round(18 * d));
         col.addView(p);
 
-        col.addView(button("◉  Float Read Rolla", true, v -> startFloat()));
+        col.addView(button("◉  Float Read Records", true, v -> startFloat()));
         col.addView(button("📖  Open all of Leeriana", false, v -> startActivity(new Intent(this, LeerianaActivity.class))));
+        col.addView(button("⌂  Put Leeriana on my home screen", false, v -> pinLeeriana()));
+        col.addView(button("◉  Put the Read Records wheel on my home screen", false, v -> pinWheel()));
         col.addView(button("📄  Use my own Leeriana file", false, v -> pick()));
         col.addView(button("↺  Back to the built-in Leeriana", false, v -> {
             File f = Web.userFile(this);
@@ -93,13 +95,13 @@ public class MainActivity extends Activity {
     }
 
     private void showStatus() {
-        status.setText(Web.usingOwnFile(this) ? "Running your own Leeriana file." : "Running the built-in Leeriana (v0.141 with Read Rolla, books included).");
+        status.setText(Web.usingOwnFile(this) ? "Running your own Leeriana file." : "Running the built-in Leeriana (v0.175). Your books and writing come from your account when you sign in.");
     }
 
     private void startFloat() {
         if (!Settings.canDrawOverlays(this)) {
             wantFloat = true;
-            toast("Turn on “Allow display over other apps” for Read Rolla, then come back.");
+            toast("Turn on “Allow display over other apps” for Read Records, then come back.");
             startActivity(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())));
             return;
         }
@@ -140,8 +142,27 @@ public class MainActivity extends Activity {
         }
         File f = Web.userFile(this);
         if (f.exists()) f.delete();
-        if (tmp.renameTo(f)) toast("Read Rolla now runs your Leeriana file."); else toast("That file could not be saved.");
+        if (tmp.renameTo(f)) toast("Read Records now runs your Leeriana file."); else toast("That file could not be saved.");
         showStatus();
+    }
+
+    /** Asks the home screen to add a Leeriana icon that opens all of Leeriana straight away. */
+    private void pinLeeriana() {
+        android.content.pm.ShortcutManager sm = getSystemService(android.content.pm.ShortcutManager.class);
+        if (sm == null || !sm.isRequestPinShortcutSupported()) { toast("Your home screen can’t add it from here: find Leeriana in your app list, hold it, and drag it to your home screen."); return; }
+        Intent open = new Intent(this, LeerianaActivity.class).setAction(Intent.ACTION_VIEW).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        android.content.pm.ShortcutInfo info = new android.content.pm.ShortcutInfo.Builder(this, "leeriana-home")
+            .setShortLabel("Leeriana").setLongLabel("Leeriana")
+            .setIcon(android.graphics.drawable.Icon.createWithResource(this, R.mipmap.ic_leeriana))
+            .setIntent(open).build();
+        sm.requestPinShortcut(info, null);
+    }
+
+    /** Asks the home screen to add the Read Records wheel widget. */
+    private void pinWheel() {
+        android.appwidget.AppWidgetManager wm = android.appwidget.AppWidgetManager.getInstance(this);
+        if (wm == null || !wm.isRequestPinAppWidgetSupported()) { toast("Hold an empty spot on your home screen → Widgets → Read Records, then drag the wheel where you like."); return; }
+        wm.requestPinAppWidget(new android.content.ComponentName(this, WheelWidget.class), null, null);
     }
 
     private void toast(String m) { Toast.makeText(this, m, Toast.LENGTH_LONG).show(); }
