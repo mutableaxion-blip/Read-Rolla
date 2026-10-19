@@ -95,7 +95,7 @@ public class MainActivity extends Activity {
     }
 
     private void showStatus() {
-        status.setText(Web.usingOwnFile(this) ? "Running your own Leeriana file." : "Running the built-in Leeriana (v0.182). Your books and writing come from your account when you sign in.");
+        status.setText(Web.usingOwnFile(this) ? "Running your own Leeriana file." : "Running the built-in Leeriana (v0.183). Your books and writing come from your account when you sign in.");
     }
 
     private void startFloat() {
