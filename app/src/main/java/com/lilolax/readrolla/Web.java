@@ -1,6 +1,10 @@
 package com.lilolax.readrolla;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
+import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -29,6 +33,23 @@ final class Web {
         "else if(n>240){clearInterval(t);}},150);})();";
 
     private Web() {}
+
+    /** Lets Leeriana's replay (v0.178) turn the screen sideways and back. Only the screen's turn is exposed; nothing else. */
+    static final class Turn {
+        private final Activity a;
+        Turn(Activity a) { this.a = a; }
+        @JavascriptInterface
+        public void landscape(final boolean on) {
+            a.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    a.setRequestedOrientation(on ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                    View d = a.getWindow().getDecorView();
+                    d.setSystemUiVisibility(on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) : View.SYSTEM_UI_FLAG_VISIBLE);
+                }
+            });
+        }
+    }
 
     static File userFile(Context c) { return new File(c.getFilesDir(), "leeriana.html"); }
 
@@ -87,6 +108,7 @@ final class Web {
             }
         });
         w.setWebChromeClient(new WebChromeClient());
+        if (c instanceof Activity) w.addJavascriptInterface(new Turn((Activity) c), "LeerianaAndroid"); /* v1.4: the replay turns the screen sideways */
         w.loadUrl(BASE + (wheelsOnly ? "#readrecords" : ""));
         return w;
     }
