@@ -17,7 +17,16 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+      - name: The signing key (a repository secret when there is one; otherwise the key in the repository)
+        env:
+          RR_KEYSTORE_B64: ${{ secrets.RR_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$RR_KEYSTORE_B64" ]; then echo "$RR_KEYSTORE_B64" | base64 -d > app/readrecords.jks; echo "signing with the secret key"; else echo "signing with app/readrecords.jks"; fi
       - name: Build the app
+        env:
+          RR_KEYSTORE_PASS: ${{ secrets.RR_KEYSTORE_PASS }}
+          RR_KEY_ALIAS: ${{ secrets.RR_KEY_ALIAS }}
+          RR_KEY_PASS: ${{ secrets.RR_KEY_PASS }}
         run: gradle assembleDebug --no-daemon --stacktrace
       - name: Name it
         run: cp app/build/outputs/apk/debug/app-debug.apk ReadRecords.apk

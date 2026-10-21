@@ -1,5 +1,15 @@
 plugins { id 'com.android.application' }
 
+/* 1.24 (Lil ol Ax: “make settings and books survive each generation”): one signing key for every build.
+   Until now each CI run signed with a fresh debug key, so Android refused each new build as an update — the old one had to be uninstalled,
+   and the phone wiped Leeriana's storage (settings, books, the record) every time. The key: app/readrecords.jks (its password in
+   readrecords.keystore.properties); a repository secret RR_KEYSTORE_B64 (+ RR_KEYSTORE_PASS, RR_KEY_ALIAS, RR_KEY_PASS) takes
+   precedence when present, so the file can leave the repository later without changing the key. */
+def rrProps = new Properties()
+def rrPropsFile = file('readrecords.keystore.properties')
+if (rrPropsFile.exists()) rrPropsFile.withInputStream { rrProps.load(it) }
+def rrKs = file(System.getenv('RR_KEYSTORE') ?: 'readrecords.jks')
+
 android {
     namespace 'com.lilolax.readrolla'
     compileSdk 34
@@ -7,10 +17,21 @@ android {
         applicationId 'com.lilolax.readrolla'
         minSdk 26
         targetSdk 33
-        versionCode 24
-        versionName '1.23'
+        versionCode 25
+        versionName '1.24'
     }
-    buildTypes { release { minifyEnabled false } }
+    signingConfigs {
+        readrecords {
+            storeFile rrKs
+            storePassword System.getenv('RR_KEYSTORE_PASS') ?: rrProps['storePassword']
+            keyAlias System.getenv('RR_KEY_ALIAS') ?: (rrProps['keyAlias'] ?: 'readrecords')
+            keyPassword System.getenv('RR_KEY_PASS') ?: rrProps['keyPassword']
+        }
+    }
+    buildTypes {
+        release { minifyEnabled false; if (rrKs.exists()) signingConfig signingConfigs.readrecords }
+        debug { if (rrKs.exists()) signingConfig signingConfigs.readrecords }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17

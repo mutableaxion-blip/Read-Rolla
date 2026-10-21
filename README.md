@@ -11,7 +11,7 @@ Read Records from Leeriana, floating over any app on your phone.
 - **Leeriana on your home screen**: the app puts two icons in your app list, **Read Records** and **Leeriana**. Leeriana opens
   all of it straight away. In the app, **⌂ Put Leeriana on my home screen** and **◉ Put the Read Records wheel on my home screen**
   ask your home screen to add them for you.
-- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.197; your books and
+- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.198; your books and
   writing come from your account when you sign in. Everything you do in Read Records is kept in the app and shared between the floating
   window and the full Leeriana.
 
@@ -36,3 +36,12 @@ Allow notifications too: Android needs a notification for anything that floats o
 Built by Claude (claude-opus-5-5 · Opus 5.5), 17 Oct 2026, Edmonton; renamed Read Records and given its Leeriana icon 18 Oct 2026. Concept and every Read Records behaviour: Lil ol Ax.
 
 The app's inner package name stays com.lilolax.readrolla so the new build installs over the old one and keeps what it saved.
+
+## One signing key, from 1.24 on
+
+Every build before 1.24 was signed with a fresh key made on the build machine, so Android treated each new build as a different app:
+the old one had to be uninstalled first, and the phone wiped Leeriana's storage with it (settings, books, the record). From 1.24
+every build is signed with `app/readrecords.jks`, so a new build installs over the last one and keeps everything. Installing 1.24
+over 1.23 still needs one last uninstall (the keys differ); sign in to Leeriana first so your settings and books come back from
+your account. To keep the key out of the repository, add it as the secret `RR_KEYSTORE_B64` (the file, base64) with
+`RR_KEYSTORE_PASS`, `RR_KEY_ALIAS`, `RR_KEY_PASS`, then delete the file: the workflow prefers the secret, and the key stays the same.
