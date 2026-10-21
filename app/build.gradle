@@ -7,8 +7,8 @@ android {
         applicationId 'com.lilolax.readrolla'
         minSdk 26
         targetSdk 33
-        versionCode 21
-        versionName '1.20'
+        versionCode 22
+        versionName '1.21'
     }
     buildTypes { release { minifyEnabled false } }
     compileOptions {
