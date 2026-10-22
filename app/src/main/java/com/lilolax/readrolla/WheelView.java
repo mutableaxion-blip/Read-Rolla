@@ -21,7 +21,7 @@ final class WheelView extends View {
         spoke.setColor(0xFFE3D3A3);
         spoke.setStrokeCap(Paint.Cap.ROUND);
         shadow.setColor(0x55000000);
-        setContentDescription("Read Records. Tap to open, drag to move, drag to the cross to close.");
+        setContentDescription("Rhythm Reader. Tap to open, drag to move, drag to the cross to close.");
     }
 
     void turnBy(float deg) { turn = (turn + deg) % 360f; invalidate(); }

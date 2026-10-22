@@ -25,8 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Read Records, floating over any app (Lil ol Ax: "turn word wheels into a widget I can drag anywhere on my phone").
- * A wheel bubble you drag anywhere; tap it and it opens into a window running Read Records; drag the window by its
+ * Rhythm Reader, floating over any app (Lil ol Ax: "turn word wheels into a widget I can drag anywhere on my phone").
+ * A wheel bubble you drag anywhere; tap it and it opens into a window running Rhythm Reader; drag the window by its
  * title bar, resize it from the corner, shrink it back to the wheel. Drag the wheel onto the cross to put it away.
  * Sizes and places are remembered; every number lives in the settings below (SharedPreferences "float").
  */
@@ -64,7 +64,7 @@ public class FloatService extends Service {
         startForeground(1, note());
         if (ACT_STOP.equals(act)) { stopSelf(); return START_NOT_STICKY; }
         if (!Settings.canDrawOverlays(this)) {
-            Toast.makeText(this, "Open the Read Records app and allow “Display over other apps” first.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Open the Rhythm Reader app and allow “Display over other apps” first.", Toast.LENGTH_LONG).show();
             stopSelf();
             return START_NOT_STICKY;
         }
@@ -77,7 +77,7 @@ public class FloatService extends Service {
     private Notification note() {
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (nm.getNotificationChannel(CH) == null) {
-            NotificationChannel ch = new NotificationChannel(CH, "Floating Read Records", NotificationManager.IMPORTANCE_MIN);
+            NotificationChannel ch = new NotificationChannel(CH, "Floating Rhythm Reader", NotificationManager.IMPORTANCE_MIN);
             ch.setShowBadge(false);
             nm.createNotificationChannel(ch);
         }
@@ -85,7 +85,7 @@ public class FloatService extends Service {
         PendingIntent stop = PendingIntent.getService(this, 2, new Intent(this, FloatService.class).setAction(ACT_STOP), PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         return new Notification.Builder(this, CH)
             .setSmallIcon(R.drawable.ic_stat_wheel)
-            .setContentTitle("Read Records is floating")
+            .setContentTitle("Rhythm Reader is floating")
             .setContentText("Tap to open it. Drag the wheel onto the cross to put it away.")
             .setContentIntent(open)
             .setOngoing(true)
@@ -147,7 +147,7 @@ public class FloatService extends Service {
         bar.setBackgroundColor(0xFF172A24);
 
         TextView title = new TextView(this);
-        title.setText("◉  Read Records");
+        title.setText("◉  Rhythm Reader");
         title.setTextColor(0xFFE3D3A3);
         title.setTextSize(15);
         bar.addView(title, new LinearLayout.LayoutParams(0, dp(44), 1f));
@@ -158,7 +158,7 @@ public class FloatService extends Service {
         keysBtn.setOnClickListener(v -> setTyping(!typing));
         TextView shrink = barButton("–", "Shrink to the wheel");
         shrink.setOnClickListener(v -> collapse());
-        TextView close = barButton("✕", "Put Read Records away");
+        TextView close = barButton("✕", "Put Rhythm Reader away");
         close.setOnClickListener(v -> stopSelf());
         bar.addView(keysBtn);
         bar.addView(shrink);

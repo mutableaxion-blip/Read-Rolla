@@ -25,7 +25,7 @@ import java.io.InputStream;
 final class Web {
     static final String HOST = "leeriana.local";
     static final String BASE = "https://" + HOST + "/";
-    /** Opens Read Records’ chooser once Leeriana has loaded (the cover is opened first, as a tap on it would). */
+    /** Opens Rhythm Reader’s chooser once Leeriana has loaded (the cover is opened first, as a tap on it would). */
     static final String WHEELS_JS =
         "(function(){var n=0,t=setInterval(function(){n++;" +
         "if(window.LeerianaRimReader&&window.StarSeekerCover){clearInterval(t);" +

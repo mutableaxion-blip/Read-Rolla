@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Read Records</string>
-    <string name="widget_desc">The Read Records wheel: tap it to float Read Records over any app.</string>
+    <string name="app_name">Rhythm Reader</string>
+    <string name="widget_desc">The Rhythm Reader wheel: tap it to float Rhythm Reader over any app.</string>
 </resources>

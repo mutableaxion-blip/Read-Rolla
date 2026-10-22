@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-/** The home-screen wheel: place it like any widget (hold, then drag it anywhere); tap it and Read Records floats over whatever you're doing. */
+/** The home-screen wheel: place it like any widget (hold, then drag it anywhere); tap it and Rhythm Reader floats over whatever you're doing. */
 public class WheelWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context ctx, AppWidgetManager mgr, int[] ids) {
