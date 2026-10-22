@@ -11,7 +11,7 @@ Rhythm Reader from Leeriana, floating over any app on your phone.
 - **Leeriana on your home screen**: the app puts two icons in your app list, **Rhythm Reader** and **Leeriana**. Leeriana opens
   all of it straight away. In the app, **⌂ Put Leeriana on my home screen** and **◉ Put the Rhythm Reader wheel on my home screen**
   ask your home screen to add them for you.
-- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.216; your books and
+- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.217; your books and
   writing come from your account when you sign in. Everything you do in Rhythm Reader is kept in the app and shared between the floating
   window and the full Leeriana.
 
@@ -45,4 +45,4 @@ every build is signed with `app/readrecords.jks`, so a new build installs over t
 over 1.23 still needs one last uninstall (the keys differ); sign in to Leeriana first so your settings and books come back from
 your account. To keep the key out of the repository, add it as the secret `RR_KEYSTORE_B64` (the file, base64) with
 `RR_KEYSTORE_PASS`, `RR_KEY_ALIAS`, `RR_KEY_PASS`, then delete the file: the workflow prefers the secret, and the key stays the same.
-Renamed Rhythm Reader (v0.216 / 1.28) 22 Oct 2026.
+Renamed Rhythm Reader (v0.217 / 1.28) 22 Oct 2026.
