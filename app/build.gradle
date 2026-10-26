@@ -17,8 +17,8 @@ android {
         applicationId 'com.lilolax.readrolla'
         minSdk 26
         targetSdk 33
-        versionCode 70
-        versionName '1.69'
+        versionCode 71
+        versionName '1.70'
     }
     signingConfigs {
         readrecords {
