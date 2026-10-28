@@ -17,8 +17,8 @@ android {
         applicationId 'com.lilolax.readrolla'
         minSdk 26
         targetSdk 33
-        versionCode 77
-        versionName '1.76'
+        versionCode 78
+        versionName '1.77'
     }
     signingConfigs {
         readrecords {
@@ -37,4 +37,9 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
     androidResources { noCompress 'html' }
+}
+
+/* 1.77 · handwriting: Google's on-device digital-ink recognizer (ML Kit); the language model downloads once, then works offline */
+dependencies {
+    implementation 'com.google.mlkit:digital-ink-recognition:18.1.0'
 }
