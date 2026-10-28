@@ -1,4 +1,4 @@
-name: Build the Rhythm Reader app
+name: Build the Leeriana app
 on:
   push:
     branches: [main]
@@ -29,14 +29,14 @@ jobs:
           RR_KEY_PASS: ${{ secrets.RR_KEY_PASS }}
         run: gradle assembleDebug --no-daemon --stacktrace
       - name: Name it
-        run: cp app/build/outputs/apk/debug/app-debug.apk ReadRecords.apk
+        run: cp app/build/outputs/apk/debug/app-debug.apk Leeriana.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: ReadRecords-apk
-          path: ReadRecords.apk
+          name: Leeriana-apk
+          path: Leeriana.apk
       - name: Put it on the Releases page (an easy download on your phone)
         uses: softprops/action-gh-release@v2
         with:
           tag_name: build-${{ github.run_number }}
-          name: Rhythm Reader build ${{ github.run_number }}
-          files: ReadRecords.apk
+          name: Leeriana build ${{ github.run_number }}
+          files: Leeriana.apk

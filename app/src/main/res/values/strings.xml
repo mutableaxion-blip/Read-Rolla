@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Rhythm Reader</string>
+    <string name="app_name">Leeriana</string>
+    <string name="reader_name">Rhythm Reader</string>
     <string name="widget_desc">The Rhythm Reader wheel: tap it to float Rhythm Reader over any app.</string>
 </resources>

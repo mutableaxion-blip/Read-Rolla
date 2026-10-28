@@ -1,4 +1,6 @@
-# Rhythm Reader — the Android app (Lil ol Ax)
+# Leeriana — the Android app (Lil Ole Ax)
+
+The app is Leeriana. Rhythm Reader, the reading wheels, is the part of it that floats over other apps; it keeps its own icon.
 
 Rhythm Reader from Leeriana, floating over any app on your phone.
 
@@ -11,7 +13,7 @@ Rhythm Reader from Leeriana, floating over any app on your phone.
 - **Leeriana on your home screen**: the app puts two icons in your app list, **Rhythm Reader** and **Leeriana**. Leeriana opens
   all of it straight away. In the app, **⌂ Put Leeriana on my home screen** and **◉ Put the Rhythm Reader wheel on my home screen**
   ask your home screen to add them for you.
-- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.258; your books and
+- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.259; your books and
   writing come from your account when you sign in. Everything you do in Rhythm Reader is kept in the app and shared between the floating
   window and the full Leeriana.
 
@@ -21,21 +23,21 @@ Sizes, places and limits are settings (SharedPreferences "float": bubbleDp, pane
 
 ### On GitHub, from your phone (no computer)
 1. Make a GitHub repository and put these files in it (or connect GitHub to Claude and let it push them).
-2. The **Build the Rhythm Reader app** action runs on every push (or press *Run workflow* on the Actions tab).
-3. When it finishes, open the repository's **Releases** page on your phone and download **ReadRecords.apk**.
+2. The **Build the Leeriana app** action runs on every push (or press *Run workflow* on the Actions tab).
+3. When it finishes, open the repository's **Releases** page on your phone and download **Leeriana.apk**.
 
 ### On a computer
 Open the folder in Android Studio (Hedgehog or newer, JDK 17) and press Run, or run `gradle assembleDebug`;
 the app is at `app/build/outputs/apk/debug/app-debug.apk`.
 
 ## Install it on the phone
-Open ReadRecords.apk → allow installing from this source when Android asks → Install.
+Open Leeriana.apk → allow installing from this source when Android asks → Install.
 Open Rhythm Reader → **◉ Float Rhythm Reader** → turn on **Allow display over other apps** → come back.
 Allow notifications too: Android needs a notification for anything that floats over other apps.
 
 Built by Claude (claude-opus-5-5 · Opus 5.5), 17 Oct 2026, Edmonton; renamed Rhythm Reader and given its Leeriana icon 18 Oct 2026. Concept and every Rhythm Reader behaviour: Lil ol Ax.
 
-The app's inner package name stays com.lilolax.readrolla so the new build installs over the old one and keeps what it saved.
+The app's inner package name stays com.lilolax.readrolla so the new build installs over the old one and keeps what it saved. Renamed Leeriana (1.76) 27 Oct 2026: the app is Leeriana, the floating reader inside it is still Rhythm Reader.
 
 ## One signing key, from 1.24 on
 
