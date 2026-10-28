@@ -11,7 +11,7 @@ Rhythm Reader from Leeriana, floating over any app on your phone.
 - **Leeriana on your home screen**: the app puts two icons in your app list, **Rhythm Reader** and **Leeriana**. Leeriana opens
   all of it straight away. In the app, **⌂ Put Leeriana on my home screen** and **◉ Put the Rhythm Reader wheel on my home screen**
   ask your home screen to add them for you.
-- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.257; your books and
+- **The app** can run your own Leeriana file (📄 Use my own Leeriana file). It ships with Leeriana v0.258; your books and
   writing come from your account when you sign in. Everything you do in Rhythm Reader is kept in the app and shared between the floating
   window and the full Leeriana.
 
