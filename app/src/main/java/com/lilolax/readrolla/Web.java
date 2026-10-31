@@ -2,7 +2,12 @@ package com.lilolax.readrolla;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.pm.ActivityInfo;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.content.Context;
@@ -20,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 /** Leeriana, served to the WebView from a private https address so its storage (localStorage, IndexedDB) behaves like a website's. */
 final class Web {
@@ -48,6 +55,35 @@ final class Web {
                     d.setSystemUiVisibility(on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) : View.SYSTEM_UI_FLAG_VISIBLE);
                 }
             });
+        }
+
+        /** 1.78: a file Leeriana makes (3D Writer's picture, 3D model or scene) goes to Downloads/Leeriana on the phone.
+         *  A web download goes nowhere inside the app, so the page hands the file over here. Returns where it went, or "" if it could not. */
+        @JavascriptInterface
+        public String save(String name, String mime, String b64) {
+            try {
+                byte[] data = Base64.decode(b64, Base64.DEFAULT);
+                String safe = name == null ? "" : name.replaceAll("[^A-Za-z0-9._ -]", "_");
+                if (safe.isEmpty()) safe = "Leeriana-file";
+                String type = mime == null || mime.isEmpty() ? "application/octet-stream" : mime;
+                if (Build.VERSION.SDK_INT >= 29) {
+                    ContentValues v = new ContentValues();
+                    v.put(MediaStore.Downloads.DISPLAY_NAME, safe);
+                    v.put(MediaStore.Downloads.MIME_TYPE, type);
+                    v.put(MediaStore.Downloads.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/Leeriana");
+                    Uri u = a.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, v);
+                    if (u == null) return "";
+                    try (OutputStream o = a.getContentResolver().openOutputStream(u)) { if (o == null) return ""; o.write(data); }
+                    return "Downloads/Leeriana/" + safe;
+                }
+                File dir = new File(a.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Leeriana");
+                if (!dir.exists() && !dir.mkdirs()) return "";
+                File f = new File(dir, safe);
+                try (FileOutputStream o = new FileOutputStream(f)) { o.write(data); }
+                return f.getAbsolutePath();
+            } catch (Exception e) {
+                return "";
+            }
         }
     }
 
