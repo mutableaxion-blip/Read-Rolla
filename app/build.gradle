@@ -18,7 +18,7 @@ android {
         minSdk 26
         targetSdk 33
         versionCode 82
-        versionName '1.80'
+        versionName '1.81'
         ndk { abiFilters 'arm64-v8a' }   /* 1.77: the handwriting recognizer ships native code per chip; his phone (and every recent Android phone) is arm64, so only that one is kept — the file is a quarter the size */
     }
     signingConfigs {
