@@ -146,6 +146,7 @@ final class Web {
         w.setWebChromeClient(new WebChromeClient());
         if (c instanceof Activity) w.addJavascriptInterface(new Turn((Activity) c), "LeerianaAndroid"); /* v1.4: the replay turns the screen sideways */
         w.addJavascriptInterface(new Ink(w), "LeerianaInkBridge"); /* 1.77: handwriting → text, on the phone */
+        w.addJavascriptInterface(new Voice(c, w), "LeerianaVoice"); /* 2.02: the heavy key buzz and 🎤 dictation for Leeriana Keys */
         w.loadUrl(BASE + (wheelsOnly ? "#readrecords" : ""));
         return w;
     }
