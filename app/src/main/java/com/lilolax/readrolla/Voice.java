@@ -14,18 +14,26 @@ import android.os.Vibrator;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
+import android.media.AudioAttributes;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * 2.02 · Leeriana Keys, decked out (Lil Ole Ax: "each press of a key to have heavy haptic … add a dictation button").
  * JS → native:  LeerianaVoice.buzz(ms, amplitude 1–255)  → the phone's motor at the strength asked (a web page can only ask for a length)
  *               LeerianaVoice.listen(lang) · LeerianaVoice.stopListening()  → Android's own speech recognizer, words as they come
  * native → JS:  LeerianaEar.partial(text) · LeerianaEar.result(text) · LeerianaEar.state('listening'|'ended'|'asking') · LeerianaEar.error(msg)
+ * 2.23 · read aloud (Lil Ole Ax: "I still can't hear the text to voice in Lens Reader"): a web page inside the app has no voice of its own,
+ *        so Android's text-to-speech speaks for it, on the media volume.
+ * JS → native:  LeerianaVoice.say(text, rate, pitch, volume 0–1, id, flush) · LeerianaVoice.hush() · LeerianaVoice.ttsState() → "ready"|"starting"|"none"
+ * native → JS:  LeerianaMouth.start(id) · LeerianaMouth.done(id) · LeerianaMouth.error(id)
  */
 final class Voice {
     private final Context c;
@@ -34,7 +42,54 @@ final class Voice {
     private SpeechRecognizer sr;
     private boolean on;
 
+    private TextToSpeech tts;
+    private int ttsOk = 0; /* 0 starting, 1 ready, -1 none */
+
     Voice(Context c, WebView web) { this.c = c; this.web = web; }
+
+    private void ttsInit() {
+        if (tts != null) return;
+        try {
+            tts = new TextToSpeech(c.getApplicationContext(), status -> {
+                if (status != TextToSpeech.SUCCESS) { ttsOk = -1; return; }
+                try { int r = tts.setLanguage(Locale.getDefault()); if (r < 0) tts.setLanguage(Locale.US); } catch (Exception ignored) {}
+                try { tts.setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build()); } catch (Exception ignored) {}
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override public void onStart(String id) { call("window.LeerianaMouth&&LeerianaMouth.start(" + js(id) + ")"); }
+                    @Override public void onDone(String id) { call("window.LeerianaMouth&&LeerianaMouth.done(" + js(id) + ")"); }
+                    @Override public void onError(String id) { call("window.LeerianaMouth&&LeerianaMouth.error(" + js(id) + ")"); }
+                    @Override public void onStop(String id, boolean interrupted) { call("window.LeerianaMouth&&LeerianaMouth.done(" + js(id) + ")"); }
+                });
+                ttsOk = 1;
+            });
+        } catch (Exception e) { ttsOk = -1; }
+    }
+
+    @JavascriptInterface
+    public String ttsState() { main.post(this::ttsInit); return ttsOk == 1 ? "ready" : ttsOk == -1 ? "none" : "starting"; }
+
+    @JavascriptInterface
+    public void say(final String text, final float rate, final float pitch, final float volume, final String id, final boolean flush) {
+        main.post(() -> {
+            ttsInit();
+            if (ttsOk != 1) { /* still waking: try again shortly */ final long until = System.currentTimeMillis() + 4000;
+                main.postDelayed(new Runnable() { @Override public void run() { if (ttsOk == 1) speakNow(text, rate, pitch, volume, id, flush); else if (ttsOk == 0 && System.currentTimeMillis() < until) main.postDelayed(this, 150); else call("window.LeerianaMouth&&LeerianaMouth.error(" + js(id) + ")"); } }, 150);
+                return; }
+            speakNow(text, rate, pitch, volume, id, flush);
+        });
+    }
+
+    private void speakNow(String text, float rate, float pitch, float volume, String id, boolean flush) {
+        try {
+            tts.setSpeechRate(Math.max(0.1f, Math.min(4f, rate)));
+            tts.setPitch(Math.max(0.1f, Math.min(2f, pitch)));
+            Bundle b = new Bundle(); b.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, Math.max(0f, Math.min(1f, volume)));
+            tts.speak(text == null ? "" : text, flush ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, b, id == null ? "u" : id);
+        } catch (Exception e) { call("window.LeerianaMouth&&LeerianaMouth.error(" + js(id) + ")"); }
+    }
+
+    @JavascriptInterface
+    public void hush() { main.post(() -> { try { if (tts != null) tts.stop(); } catch (Exception ignored) {} }); }
 
     private static String js(String s) { return JSONObject.quote(s == null ? "" : s); }
     private void call(final String code) { web.post(() -> { try { web.evaluateJavascript(code, null); } catch (Exception ignored) {} }); }
