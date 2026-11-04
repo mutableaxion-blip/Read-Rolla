@@ -57,6 +57,19 @@ final class Web {
             });
         }
 
+        /** 2.28: Leeriana's Lens in full screen hides the phone's own bars (time, battery, buttons); a swipe from the edge shows them for a moment.
+         *  Only the bars change; the screen's turn is left as it is. */
+        @JavascriptInterface
+        public void immersive(final boolean on) {
+            a.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    View d = a.getWindow().getDecorView();
+                    d.setSystemUiVisibility(on ? (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION) : View.SYSTEM_UI_FLAG_VISIBLE);
+                }
+            });
+        }
+
         /** 1.78: a file Leeriana makes (3D Writer's picture, 3D model or scene) goes to Downloads/Leeriana on the phone.
          *  A web download goes nowhere inside the app, so the page hands the file over here. Returns where it went, or "" if it could not. */
         @JavascriptInterface
